@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+    <script src="webjars/vue/2.6.10/dist/vue.js"></script>
+    <script src="webjars/axios/0.19.0/dist/axios.js"></script>
+    <script src="webjars/jquery/3.4.1/jquery.js"></script>
+    <script src="webjars/bootstrap/4.3.1/js/bootstrap.js"></script>
+    <script src="webjars/underscorejs/1.9.0/underscore-min.js"></script>
+    <script src="webjars/momentjs/2.24.0/moment.js"></script>
+    <link rel="stylesheet" href="webjars/bootstrap/4.3.1/css/bootstrap.css">
+    <style>
+    </style>
+</head>
+<body>
+<div id="app" class="container">
+    <template v-for="(grid, quarter) in history">
+        <h7>{{quarter}}</h7>
+        <table class="table table-sm">
+            <tr v-for="row in grid">
+                <template v-for="a in row">
+                    <td v-bind:style="{backgroundColor: weekdayBackground(a)}" class="border"></td>
+                </template>
+            </tr>
+        </table>
+    </template>
+</div>
+</body>
+</html>
+
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            history: {}
+        },
+        created: function () {
+            let urlParams = new URLSearchParams(window.location.search);
+            axios.get('/m/history/' + urlParams.get('habitId')).then((response) => {
+                this.history = response.data;
+            });
+
+        },
+        methods: {
+            weekdayBackground(activity) {
+                if (activity) return 'lightgoldenrodyellow';
+                else if (activity == false) return 'lightgray';
+                else return '';
+            }
+        }
+    });
+</script>

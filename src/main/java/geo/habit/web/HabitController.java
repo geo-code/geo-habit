@@ -1,6 +1,5 @@
 package geo.habit.web;
 
-import geo.habit.Calendar;
 import geo.habit.ContinuesDays;
 import geo.habit.databse.Habit;
 import geo.habit.databse.HabitDao;
@@ -11,24 +10,19 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.time.LocalDate;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-import static geo.habit.Calendar.*;
+import static geo.habit.Calendar.indexOfWeek;
+import static geo.habit.Calendar.startOfWeek;
 
 @RestController
 @AllArgsConstructor
-public class ApiController {
+public class HabitController {
     private final HabitDao habitDao;
     private final HabitWeekDao habitWeekDao;
     private final ContinuesDays continuesDays;
-
-    @GetMapping("/health")
-    public String health() {
-        return "ok";
-    }
 
     @GetMapping("/habit")
     public List<Habit> getHabits() {
@@ -50,22 +44,6 @@ public class ApiController {
     @DeleteMapping("/habit/{id}")
     public void deleteHabit(@PathVariable String id) {
         habitDao.deleteById(id);
-    }
-
-    @GetMapping("/habitWeek/{habitId}")
-    public List<HabitWeekItem> getHabitWeeks(@PathVariable String habitId) {
-        List<HabitWeek> habitWeeks = habitWeekDao.findByIdHabitIdOrderByIdDayDesc(habitId);
-        if (habitWeeks.size() == 0) return Collections.EMPTY_LIST;
-        Map<String, HabitWeek> habitWeekMap = habitWeeks.stream().collect(Collectors.toMap(hw -> hw.getId().getDay(), Function.identity()));
-        LocalDate date = parse(habitWeeks.get(0).getId().getDay());
-        List<HabitWeekItem> items = new ArrayList<>();
-        for (int i = 0; i < 1000; i++) {
-            String day = format(date.minusWeeks(i));
-            if (habitWeekMap.containsKey(day)) items.add(new HabitWeekItem(habitWeekMap.get(day)));
-            else items.add(new HabitWeekItem(day));
-            if (day.equals(habitWeeks.get(habitWeeks.size() -1).getId().getDay())) break;
-        }
-        return items;
     }
 
     @GetMapping("/item/{day}")

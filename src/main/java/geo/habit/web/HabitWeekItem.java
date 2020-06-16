@@ -1,13 +1,11 @@
 package geo.habit.web;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import geo.habit.databse.HabitWeek;
 import lombok.Getter;
 
 @Getter
 public class HabitWeekItem {
     private String day;
-    @JsonIgnore
     private boolean[] activities = new boolean[7];
     private boolean success;
 

@@ -2,6 +2,7 @@ package geo.habit;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import static java.time.format.DateTimeFormatter.ISO_DATE;
 
@@ -40,5 +41,14 @@ public class Calendar {
 
     public static String format(LocalDate localDate) {
         return localDate.format(ISO_DATE);
+    }
+
+    public static String day2month(String day) {
+        return parse(day).format(DateTimeFormatter.ofPattern("yyyy.M"));
+    }
+
+    public static String day2quarter(String day) {
+        LocalDate date = parse(day);
+        return date.getYear() + "\\" + (((date.getMonth().getValue() - 1) / 3) + 1);
     }
 }

@@ -43,6 +43,7 @@
                 <a class="dropdown-item" href="#"> Record </a>
                 <a class="dropdown-item" href="/edit.html?mode=new"> New </a>
                 <a class="dropdown-item" href="/edit.html?mode=edit"> Edit </a>
+                <a class="dropdown-item" href="/manual.html"> Manual </a>
             </div>
         </div>
     </div>
@@ -58,7 +59,7 @@
                 </div>
             </div>
 
-            <table class="table">
+            <table @click="historyPage(item.habitId)" class="table table-sm">
                 <tr>
                     <template v-for="(a, index) in item.activities">
                         <td v-bind:style="{backgroundColor: weekdayBackground(a), outline: weekdayOutline(index)}" class="border"></td>
@@ -113,6 +114,9 @@
             weekdayOutline(index) {
                 if (index == (moment(this.day).isoWeekday() - 1)) return '1px solid green';
                 else return '';
+            },
+            historyPage(habitId) {
+                location.href = "/history.html?habitId=" + habitId;
             }
         }
     });

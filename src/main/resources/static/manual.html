@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+    <script src="webjars/vue/2.6.10/dist/vue.js"></script>
+    <script src="webjars/axios/0.19.0/dist/axios.js"></script>
+    <script src="webjars/jquery/3.4.1/jquery.js"></script>
+    <script src="webjars/bootstrap/4.3.1/js/bootstrap.js"></script>
+    <script src="webjars/underscorejs/1.9.0/underscore-min.js"></script>
+    <script src="webjars/momentjs/2.24.0/moment.js"></script>
+    <link rel="stylesheet" href="webjars/bootstrap/4.3.1/css/bootstrap.css">
+    <style>
+    </style>
+</head>
+<body>
+<div id="app" class="container">
+    <h5>Manual input</h5>
+    <hr>
+    <div class="form-group row">
+        <div class="col-4 col-form-label">habit</div>
+        <div class="col-8">
+            <select v-model="habitId" class="form-control">
+                <option v-for="h in habits" :value="h.id">{{h.name}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-4 col-form-label">from</div>
+        <div class="col-8">
+            <select v-model="dayFrom" class="form-control">
+                <option v-for="weekDay in getWeekDays()">{{weekDay}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-4 col-form-label">weeks</div>
+        <div class="col-8">
+            <select v-model="weeks" class="form-control">
+                <option v-for="n in 52">{{n}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-6">
+            <button @click="saveManual" class="btn btn-outline-primary btn-block">Save</button>
+        </div>
+        <div class="col-6">
+            <button @click="cancelManual" class="btn btn-outline-secondary btn-block">Cancel</button>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
+
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            habits: [],
+            habitId: '',
+            dayFrom: '',
+            weeks: ''
+        },
+        created: function () {
+            axios.get('/habit').then((response) => {
+                this.habits = response.data;
+            });
+        },
+        methods: {
+            getWeekDays() {
+                let days = [];
+                let day = moment().startOf('isoweek');
+                _.times(42, function () {
+                    days.push(day.subtract(1, 'week').format('YYYY-MM-DD'));
+                })
+                return days;
+            },
+            saveManual() {
+                axios.post('/m/manual', {habitId: this.habitId, dayFrom: this.dayFrom, weeks: this.weeks}).then(() => {
+                    alert("saved");
+                    location.href = "/";
+                });
+            },
+            cancelManual() {
+                location.href = "/";
+            }
+        }
+    });
+</script>

@@ -20,7 +20,5 @@ public class SpringTest {
 
     @Test
     public void test() throws Exception {
-        int calc = continuesDays.calc("4KR", "2020-05-05");
-        System.out.println(calc);
     }
 }
