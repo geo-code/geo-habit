@@ -30,13 +30,13 @@ public class MangeController {
 
     @GetMapping("/habitWeek/{habitId}")
     public List<HabitWeekItem> getHabitWeeks(@PathVariable String habitId) {
-        List<HabitWeek> habitWeeks = habitWeekDao.findByIdHabitIdOrderByIdDayDesc(habitId);
+        List<HabitWeek> habitWeeks = habitWeekDao.findByIdHabitIdOrderByIdDay(habitId);
         if (habitWeeks.size() == 0) return Collections.EMPTY_LIST;
         Map<String, HabitWeek> habitWeekMap = habitWeeks.stream().collect(Collectors.toMap(hw -> hw.getId().getDay(), Function.identity()));
         LocalDate date = parse(habitWeeks.get(0).getId().getDay());
         List<HabitWeekItem> items = new ArrayList<>();
         for (int i = 0; i < 1000; i++) {
-            String day = format(date.minusWeeks(i));
+            String day = format(date.plusWeeks(i));
             if (habitWeekMap.containsKey(day)) items.add(new HabitWeekItem(habitWeekMap.get(day)));
             else items.add(new HabitWeekItem(day));
             if (day.equals(habitWeeks.get(habitWeeks.size() -1).getId().getDay())) break;

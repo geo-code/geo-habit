@@ -16,10 +16,10 @@
 <div id="app" class="container">
     <template v-for="(grid, quarter) in history">
         <h7>{{quarter}}</h7>
-        <table class="table table-sm">
+        <table>
             <tr v-for="row in grid">
                 <template v-for="a in row">
-                    <td v-bind:style="{backgroundColor: weekdayBackground(a)}" class="border"></td>
+                    <td v-bind:style="{backgroundColor: weekdayBackground(a)}" class="border" width="23px" height="10px"></td>
                 </template>
             </tr>
         </table>
