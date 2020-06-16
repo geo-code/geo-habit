@@ -9,5 +9,5 @@ public class Habit {
     private String id;
     private String name;
     private int weekGoal;
-    private int continuousWeeks;
+    private String icon;
 }

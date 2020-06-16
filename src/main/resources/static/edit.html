@@ -6,14 +6,74 @@
     <script src="webjars/axios/0.19.0/dist/axios.js"></script>
     <script src="webjars/jquery/3.4.1/jquery.js"></script>
     <script src="webjars/bootstrap/4.3.1/js/bootstrap.js"></script>
+    <script src="webjars/underscorejs/1.9.0/underscore-min.js"></script>
     <link rel="stylesheet" href="webjars/bootstrap/4.3.1/css/bootstrap.css">
     <style>
     </style>
 </head>
 <body>
-<select class="form-control">
-
-</select>
+<div id="app" class="container">
+    <h5>{{mode}} habit</h5>
+    <hr>
+    <div class="form-group row">
+        <div class="col-4 col-form-label"> id</div>
+        <div v-if="mode=='edit'" class="col-8">
+            <select v-model="index" @change="habitSelected" class="form-control">
+                <option v-for="(h, index) in habits" :value="index">
+                    {{h.id}}
+                </option>
+            </select>
+        </div>
+        <div v-if="mode=='new'" class="col-8 row">
+            <div class="col-8">
+                <input v-model="habit.id" class="form-control" v-bind:class="{'is-invalid': idExist == true, 'is-valid': idExist == false}">
+            </div>
+            <div class="col-4">
+                <button @click="idCheck(habit.id)" class="btn btn-outline-dark">check</button>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-4 col-form-label"> name</div>
+        <div class="col-8">
+            <input v-model="habit.name" class="form-control">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-4 col-form-label"> week gaol</div>
+        <div class="col-8">
+            <select v-model="habit.weekGoal" class="form-control">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-4 col-form-label"> icon</div>
+        <div class="col-8 text-right">
+            <select v-model="habit.icon" class="form-control">
+                <option v-for="icon in icons"> {{icon}}</option>
+            </select>
+            <img v-if="habit.icon" :src="'/adioma/black/' + habit.icon" height="40px">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-4">
+            <button v-if="mode=='edit'" @click="deleteHabit" class="btn btn-outline-danger btn-block"> Delete</button>
+        </div>
+        <div class="col-4">
+            <button @click="saveHabit" class="btn btn-outline-primary btn-block"> Save</button>
+        </div>
+        <div class="col-4">
+            <button @click="cancelEdit" class="btn btn-outline-secondary btn-block"> Cancel</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>
 
@@ -21,17 +81,51 @@
     var app = new Vue({
         el: '#app',
         data: {
-            day: '2020-06-11',
-            items: []
+            mode: 'edit',
+            idExist: {},
+            habit: {id: '', name: '', weekGoal: '', icon: ''},
+            habits: [''],
+            index: 0,
+            icons: ['']
         },
         created: function () {
-            axios.get('/items/' + this.day).then((response) => {
-                this.items = response.data;
+            let urlParams = new URLSearchParams(window.location.search);
+            this.mode = urlParams.get('mode');
+
+            if (this.mode == 'edit') {
+                axios.get('/habit').then((response) => {
+                    this.habits = response.data;
+                    this.habitSelected();
+                });
+            }
+            axios.get('/icon').then((response) => {
+                this.icons = response.data;
             });
         },
         methods: {
-            toggleItem(index) {
-                alert(this.items[index].habitId);
+            habitSelected() {
+                this.habit = this.habits[this.index];
+            },
+            idCheck(id) {
+                axios.get('/habit/' + id + '/exist').then((response) => {
+                    this.idExist = response.data;
+                });
+            },
+            saveHabit() {
+                axios.post('/habit', this.habit).then(() => {
+                    alert("saved");
+                    location.reload();
+                });
+            },
+            deleteHabit() {
+                if (confirm('delete? ' + this.habit.id)) {
+                    axios.delete('/habit/' + this.habit.id).then((response) => {
+                        location.reload();
+                    });
+                }
+            },
+            cancelEdit() {
+                location.href = "/";
             }
         }
     });

@@ -11,7 +11,11 @@ public class Calendar {
     }
 
     public static String startOfWeek(String day) {
-        return format(parse(day).with(DayOfWeek.MONDAY));
+        return format(startOfWeek(parse(day)));
+    }
+
+    public static LocalDate startOfWeek(LocalDate date) {
+        return date.with(DayOfWeek.MONDAY);
     }
 
     public static String previous(String day) {
@@ -22,15 +26,19 @@ public class Calendar {
         return format(parse(day).plusDays(1));
     }
 
+    public static int indexOfWeek() {
+        return indexOfWeek(today());
+    }
+
     public static int indexOfWeek(String day) {
         return parse(day).getDayOfWeek().getValue() - 1;
     }
 
-    private static LocalDate parse(String day) {
+    public static LocalDate parse(String day) {
         return LocalDate.parse(day, ISO_DATE);
     }
 
-    private static String format(LocalDate localDate) {
+    public static String format(LocalDate localDate) {
         return localDate.format(ISO_DATE);
     }
 }

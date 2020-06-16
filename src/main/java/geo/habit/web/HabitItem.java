@@ -1,15 +1,31 @@
 package geo.habit.web;
 
-import lombok.Data;
+import geo.habit.databse.Habit;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
 public class HabitItem {
     private String habitId;
     private String name;
-    private int continuousDays;
-    private Boolean[] activities;
     private int weekGoal;
-    private int weekAchieved;
-    private boolean checked;
     private String icon;
+    private Boolean[] activities = new Boolean[7];
+    @Setter
+    private int weekAchieved;
+    @Setter
+    private int continuousDays;
+    @Setter
+    private boolean checked = false;
+
+    public HabitItem(Habit habit) {
+        habitId = habit.getId();
+        name = habit.getName();
+        weekGoal = habit.getWeekGoal();
+        icon = habit.getIcon();
+    }
+
+    public void setActivity(int index, boolean activity) {
+        activities[index] = activity;
+    }
 }

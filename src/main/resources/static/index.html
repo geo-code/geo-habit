@@ -28,9 +28,12 @@
 <div id="app">
     <div class="row">
         <div class="col-10 row">
-            <a href="#" class="col-3 center"> <img src="icon/arrow-left.svg" width="25"> </a>
-            <a href="#" class="col-5 center text-dark"> 2020-06-10 </a>
-            <a href="#" class="col-3 center"> <img src="icon/arrow-right.svg" width="25"> </a>
+            <div @click="moveDay(-1)" class="col-2 center"><img src="icon/arrow-left.svg" width="25"></div>
+            <div onclick="location.replace('/');" class="col-5 center text-dark">
+                <strong v-if="isToday()"> Today </strong>
+                <span v-else>{{dayDisplay()}}</span>
+            </div>
+            <div @click="moveDay(+1)" class="col-2 center"><img src="icon/arrow-right.svg" width="25"></div>
         </div>
         <div class="col-2 center dropdown text-right">
             <a class="btn" href="#" id="dropdownMenuLink" data-toggle="dropdown">
@@ -38,7 +41,8 @@
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
                 <a class="dropdown-item" href="#"> Record </a>
-                <a class="dropdown-item" href="#"> Edit </a>
+                <a class="dropdown-item" href="/edit.html?mode=new"> New </a>
+                <a class="dropdown-item" href="/edit.html?mode=edit"> Edit </a>
             </div>
         </div>
     </div>
@@ -56,17 +60,15 @@
 
             <table class="table">
                 <tr>
-                    <template v-for="a in item.activities">
-                        <td v-if="a" class="border" style="background-color: lightgoldenrodyellow"></td>
-                        <td v-if="a == false" class="border" style="background-color: lightgray"></td>
-                        <td v-if="a == null" class="border"></td>
+                    <template v-for="(a, index) in item.activities">
+                        <td v-bind:style="{backgroundColor: weekdayBackground(a), outline: weekdayOutline(index)}" class="border"></td>
                     </template>
                 </tr>
             </table>
         </div>
         <div class="col-3 center">
-            <img @click="toggleItem(index)" v-if="item.checked" :src="'adioma/blue/' + item.icon + '.png'" style="height: 60px;">
-            <img @click="toggleItem(index)" v-else :src="'adioma/gray/' + item.icon + '.png'" style="height: 60px;">
+            <img @click="toggleItem(index)" v-if="item.checked" :src="'adioma/blue/' + item.icon" style="height: 60px;">
+            <img @click="toggleItem(index)" v-else :src="'adioma/gray/' + item.icon" style="height: 60px;">
         </div>
     </div>
 </div>
@@ -77,17 +79,40 @@
     var app = new Vue({
         el: '#app',
         data: {
-            day: '2020-06-11',
+            day: '',
             items: []
         },
         created: function () {
-            axios.get('/items/' + this.day).then((response) => {
+            let urlParams = new URLSearchParams(window.location.search);
+            this.day = urlParams.get('day');
+            if (!this.day) this.day = moment().format('YYYY-MM-DD');
+
+            axios.get('/item/' + this.day).then((response) => {
                 this.items = response.data;
             });
         },
         methods: {
             toggleItem(index) {
-                alert(this.items[index].habitId);
+                axios.post('item/' + this.day + '/' + this.items[index].habitId);
+                location.reload();
+            },
+            moveDay(days) {
+                location.href = "/?day=" + moment(this.day).add(days, 'days').format('YYYY-MM-DD');
+            },
+            isToday() {
+                return this.day == moment().format('YYYY-MM-DD');
+            },
+            dayDisplay() {
+                return moment(this.day).format('M.D ddd');
+            },
+            weekdayBackground(activity) {
+                if (activity) return 'lightgoldenrodyellow';
+                else if (activity == false) return 'lightgray';
+                else return '';
+            },
+            weekdayOutline(index) {
+                if (index == (moment(this.day).isoWeekday() - 1)) return '1px solid green';
+                else return '';
             }
         }
     });
