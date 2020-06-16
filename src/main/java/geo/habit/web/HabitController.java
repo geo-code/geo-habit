@@ -1,6 +1,7 @@
 package geo.habit.web;
 
 import geo.habit.ContinuesDays;
+import geo.habit.GeoHabitApplication;
 import geo.habit.databse.Habit;
 import geo.habit.databse.HabitDao;
 import geo.habit.databse.HabitWeek;
@@ -9,6 +10,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -86,7 +89,7 @@ public class HabitController {
 
     @GetMapping("/icon")
     public List<String> getIcons() throws Exception {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/static/adioma/black")));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/icon.txt")));
         List<String> icons = new ArrayList<>();
         String line;
         while ((line = reader.readLine()) != null) icons.add(line);

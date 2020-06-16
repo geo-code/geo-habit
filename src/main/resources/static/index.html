@@ -68,8 +68,8 @@
             </table>
         </div>
         <div class="col-3 center">
-            <img @click="toggleItem(index)" v-if="item.checked" :src="'adioma/blue/' + item.icon" style="height: 60px;">
-            <img @click="toggleItem(index)" v-else :src="'adioma/gray/' + item.icon" style="height: 60px;">
+            <img @click="toggleItem(index)" v-if="item.checked" :src="'adioma/blue/' + item.icon + '.png'" style="height: 60px;">
+            <img @click="toggleItem(index)" v-else :src="'adioma/gray/' + item.icon + '.png'" style="height: 60px;">
         </div>
     </div>
 </div>

@@ -59,7 +59,7 @@
             <select v-model="habit.icon" class="form-control">
                 <option v-for="icon in icons"> {{icon}}</option>
             </select>
-            <img v-if="habit.icon" :src="'/adioma/black/' + habit.icon" height="40px">
+            <img v-if="habit.icon" :src="'/adioma/black/' + habit.icon + '.png'" height="40px">
         </div>
     </div>
     <div class="form-group row">
