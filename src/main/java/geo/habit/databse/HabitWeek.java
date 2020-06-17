@@ -3,7 +3,6 @@ package geo.habit.databse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.springframework.data.annotation.Id;
 
 import static java.lang.Integer.bitCount;
