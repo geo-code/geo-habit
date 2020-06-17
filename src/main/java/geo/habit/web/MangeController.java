@@ -69,12 +69,13 @@ public class MangeController {
     public void postManual(@RequestBody Manual manual) {
         Habit habit = habitDao.findById(manual.getHabitId()).get();
         LocalDate date = parse(manual.getDayFrom());
-        for (int i = 0; i < manual.getWeeks(); i++) {
+        LocalDate dateTo = parse(manual.getDayTo());
+        while (date.equals(dateTo) || date.isBefore(dateTo)) {
             HabitWeek habitWeek = new HabitWeek(new HabitWeek.ID(Calendar.format(date), manual.getHabitId()));
             for (int j = 0; j < habit.getWeekGoal(); j++) habitWeek.setActivity(j, true);
             habitWeek.setSuccess(true);
             habitWeekDao.save(habitWeek);
-            date = date.minusWeeks(1);
+            date = date.plusWeeks(1);
         }
     }
 }

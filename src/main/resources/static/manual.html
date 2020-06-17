@@ -33,10 +33,10 @@
         </div>
     </div>
     <div class="form-group row">
-        <div class="col-4 col-form-label">weeks</div>
+        <div class="col-4 col-form-label">to</div>
         <div class="col-8">
-            <select v-model="weeks" class="form-control">
-                <option v-for="n in 52">{{n}}</option>
+            <select v-model="dayTo" class="form-control">
+                <option v-for="weekDay in getWeekDays()">{{weekDay}}</option>
             </select>
         </div>
     </div>
@@ -60,7 +60,7 @@
             habits: [],
             habitId: '',
             dayFrom: '',
-            weeks: ''
+            dayTo: ''
         },
         created: function () {
             axios.get('/habit').then((response) => {
@@ -77,7 +77,7 @@
                 return days;
             },
             saveManual() {
-                axios.post('/m/manual', {habitId: this.habitId, dayFrom: this.dayFrom, weeks: this.weeks}).then(() => {
+                axios.post('/m/manual', {habitId: this.habitId, dayFrom: this.dayFrom, dayTo: this.dayTo}).then(() => {
                     alert("saved");
                     location.href = "/";
                 });

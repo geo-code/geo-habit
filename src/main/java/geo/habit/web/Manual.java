@@ -6,5 +6,5 @@ import lombok.Getter;
 public class Manual {
     private String habitId;
     private String dayFrom;
-    private int weeks;
+    private String dayTo;
 }
