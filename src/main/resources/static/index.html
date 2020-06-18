@@ -97,8 +97,9 @@
         },
         methods: {
             toggleItem(index) {
-                axios.post('item/' + this.day + '/' + this.items[index].habitId);
-                location.reload();
+                axios.post('item/' + this.day + '/' + this.items[index].habitId).then((response) => {
+                    location.reload();
+                });
             },
             moveDay(days) {
                 location.href = "/?day=" + moment(this.day).add(days, 'days').format('YYYY-MM-DD');
