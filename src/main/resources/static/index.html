@@ -18,8 +18,8 @@
         }
 
         div.item {
-            margin: 10px;
-            padding-top: 10px;
+            margin: 8px;
+            padding-top: 8px;
             border: thin solid slategray;
             border-radius: 5px;
         }
@@ -52,7 +52,7 @@
     </div>
     <div v-for="(item, index) in items" class="row item">
         <div class="col-9">
-            <h5> {{item.name}} </h5>
+            <h6> {{item.name}} </h6>
             <div class="row">
                 <div class="col-6">
                     {{item.continuousDays}} days
@@ -71,8 +71,8 @@
             </table>
         </div>
         <div class="col-3 center">
-            <img @click="toggleItem(index)" v-if="item.checked" :src="'adioma/blue/' + item.icon + '.png'" style="height: 60px;">
-            <img @click="toggleItem(index)" v-else :src="'adioma/gray/' + item.icon + '.png'" style="height: 60px;">
+            <img @click="toggleItem(index)" v-if="item.checked" :src="'adioma/blue/' + item.icon + '.png'" style="width: 60px; height: 55px;">
+            <img @click="toggleItem(index)" v-else :src="'adioma/gray/' + item.icon + '.png'" style="width: 60px; height: 55px;">
         </div>
     </div>
 </div>
