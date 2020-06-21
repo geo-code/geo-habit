@@ -57,7 +57,7 @@
                 <div class="col-6">
                     {{item.continuousDays}} days
                 </div>
-                <div class="col-6 text-right">
+                <div class="col-6 text-right" :class="item.weekAchieved >= item.weekGoal ? 'text-primary' : ''">
                     {{item.weekAchieved}}/{{item.weekGoal}}
                 </div>
             </div>
@@ -71,8 +71,7 @@
             </table>
         </div>
         <div class="col-3 center">
-            <img @click="toggleItem(index)" v-if="item.checked" :src="'adioma/blue/' + item.icon + '.png'" style="height: 55px;">
-            <img @click="toggleItem(index)" v-else :src="'adioma/gray/' + item.icon + '.png'" style="height: 55px;">
+            <img @click="toggleItem(index)" :src="'adioma/' + (item.checked ? 'blue/' : 'gray/') + item.icon + '.png'" style="height: 55px;">
         </div>
     </div>
 </div>
