@@ -10,4 +10,5 @@ public class Habit {
     private String name;
     private int weekGoal;
     private String icon;
+    private boolean show;
 }

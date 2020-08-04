@@ -91,7 +91,7 @@
             if (!this.day) this.day = moment().format('YYYY-MM-DD');
 
             axios.get('/item/' + this.day).then((response) => {
-                this.items = response.data;
+                this.items = response.data.filter(item => item.show);
             });
         },
         methods: {
